@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TikTok Authorization Callback | Silent Battles Publisher</title>
+  <meta name="description" content="TikTok authorization callback page for Silent Battles Publisher.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d0d0f;
+      --panel: #171719;
+      --text: #f2f2ee;
+      --muted: #b7b4aa;
+      --line: #333238;
+      --gold: #c9a45c;
+      --success: #80cfa9;
+      --error: #e28b8b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    main, footer, nav {
+      width: min(920px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      background: #09090a;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      gap: 20px;
+    }
+    .brand {
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    a { color: var(--gold); }
+    .links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    main {
+      padding: 72px 0 20px;
+    }
+    h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      line-height: 1.08;
+      margin: 0 0 14px;
+    }
+    p { color: var(--muted); }
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 28px;
+    }
+    .status {
+      border-left: 3px solid var(--gold);
+      background: #121214;
+      padding: 16px 18px;
+      margin: 18px 0 0;
+      color: var(--muted);
+    }
+    .status.success { border-left-color: var(--success); }
+    .status.error { border-left-color: var(--error); }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    .button {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      background: var(--gold);
+      color: #111;
+      font-weight: 700;
+      padding: 11px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+    .button.secondary {
+      background: transparent;
+      color: var(--gold);
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0 40px;
+      margin-top: 72px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <a class="brand" href="index.html">Silent Battles Publisher</a>
+      <div class="links">
+        <a href="demo.html">Demo</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>TikTok Authorization Callback</h1>
+    <p>TikTok authorization completed. You may return to Silent Battles Publisher.</p>
+
+    <section class="panel" aria-label="Authorization status">
+      <h2 id="status-title">Authorization Status</h2>
+      <div id="status-message" class="status">
+        Checking authorization response...
+      </div>
+      <p>
+        This static page only displays the authorization result from the browser URL. It does not exchange authorization codes for tokens.
+      </p>
+      <div class="actions">
+        <a class="button" href="index.html">Back to Home</a>
+        <a class="button secondary" href="demo.html">View Demo</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Silent Battles Publisher</span>
+    <span>
+      <a href="index.html">Home</a> |
+      <a href="demo.html">Demo</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Service</a>
+    </span>
+  </footer>
+
+  <script>
+    function safeText(value) {
+      if (!value) return "";
+      return String(value).replace(/[<>&"']/g, "");
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+    const statusMessage = document.getElementById("status-message");
+
+    if (error) {
+      statusMessage.classList.add("error");
+      statusMessage.textContent =
+        "TikTok returned an authorization error: " +
+        safeText(error) +
+        (errorDescription ? ". " + safeText(errorDescription) : ".");
+    } else if (code) {
+      statusMessage.classList.add("success");
+      statusMessage.textContent =
+        "Authorization code received safely. State parameter " +
+        (state ? "was also returned." : "was not included.") +
+        " Token exchange is handled by the secure app backend, not this page.";
+    } else {
+      statusMessage.textContent =
+        "No authorization code or error was found in the URL. If you arrived here from TikTok, return to the app and try again.";
+    }
+  </script>
+</body>
+</html>
